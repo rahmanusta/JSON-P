@@ -48,7 +48,6 @@ public class App {
         if (!jsonFile.exists()) {
             jsonFile.createNewFile();
         }
-        Files.delete(Paths.get("./src/main/resources/file.json"));
 
         try (JsonGenerator jsonUretec2 = Json
                 .createGeneratorFactory(config)
