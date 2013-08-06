@@ -1,4 +1,4 @@
-package com.kodcu;
+package com.kodcu.orn1;
 
 import java.math.BigInteger;
 import javax.json.Json;

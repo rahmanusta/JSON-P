@@ -1,4 +1,4 @@
-package com.kodcu;
+package com.kodcu.orn2;
 
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
@@ -17,9 +17,10 @@ import java.util.Map;
  * Time: 11:04 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Appp {
+public class App {
     public static void main(String[] args) throws IOException {
         Map<String, Boolean> config = new HashMap<>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
 
         // Basit bir dizi
         JsonArray jsonArray = Json.createArrayBuilder()
@@ -31,16 +32,11 @@ public class Appp {
                 .add("soyad", "Demir")
                 .build();
 
-        try (PrintWriter pw = new PrintWriter("./src/main/resources/jsonObject.json")) {
+        try (PrintWriter pw = new PrintWriter("./src/main/resources/jsonObject.json");
+             JsonWriter jsonWriter = Json.createWriter(pw)) {
 
-            //  JsonWriter jsonWriter = Json.createWriter(pw);
+            jsonWriter.writeObject(jsonObject);
 
-            //   jsonWriter.writeObject(jsonObject);
-
-
-            config.put(JsonGenerator.PRETTY_PRINTING, true);
-
-            Json.createWriterFactory(config).createWriter(pw).writeObject(jsonObject);
         }
 
         JsonReader reader = Json
@@ -48,24 +44,19 @@ public class Appp {
 
         JsonObject obj = reader.readObject();
 
-        System.out.println("Okunan: "+obj.toString());
+        System.out.println("Okunan: " + obj.toString());
 
-        URL url = new URL("http://search.twitter.com/search.json?q=kodcucom&page=1");
+        URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?address=Marmara+University&sensor=false");
         InputStream is = url.openStream();
 
         JsonObject twitterObj = Json
-                                .createReader(is)
-                                .readObject();
+                .createReader(is)
+                .readObject();
 
-        try (PrintWriter pw = new PrintWriter("./src/main/resources/twitterObj.json")) {
+        try (PrintWriter pw = new PrintWriter("./src/main/resources/geoApi.json");
+             JsonWriter jsonWriter = Json.createWriterFactory(config).createWriter(pw)) {
 
-          //  JsonWriter jsonWriter = Json.createWriter((pw));
-          //  jsonWriter.write(twitterObj);
-
-            Json
-                .createWriterFactory(config)
-                .createWriter(pw)
-                .writeObject(twitterObj);
+            jsonWriter.writeObject(twitterObj);
         }
 
     }
